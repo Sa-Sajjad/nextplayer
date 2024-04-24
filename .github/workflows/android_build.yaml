@@ -2,7 +2,7 @@ name: Android Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main2 ]
   pull_request:
 concurrency:
   group: build-${{ github.ref }}
