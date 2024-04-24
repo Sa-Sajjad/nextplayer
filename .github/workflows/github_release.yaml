@@ -28,14 +28,14 @@ jobs:
       - name: Build Release APK
         run: ./gradlew assembleRelease
 
-      - name: Sign Release APK
-        uses: r0adkll/sign-android-release@f30bdd30588842ac76044ecdbd4b6d0e3e813478
-        with:
-          releaseDirectory: app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.KEYSTORE }}
-          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
-          alias: ${{ secrets.KEY_ALIAS }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
+      # - name: Sign Release APK
+        # uses: r0adkll/sign-android-release@f30bdd30588842ac76044ecdbd4b6d0e3e813478
+        # with:
+          # releaseDirectory: app/build/outputs/apk/release
+          # signingKeyBase64: ${{ secrets.KEYSTORE }}
+          # keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          # alias: ${{ secrets.KEY_ALIAS }}
+          # keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Rename Files
         run: |
