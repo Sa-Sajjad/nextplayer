@@ -42,7 +42,6 @@
                     android:textColor="@android:color/white"
                     android:ellipsize="end"
                     android:id="@+id/video_name"
-                    android:background="@drawable/transparent_circle_background"
                     android:layout_width="0.0dip"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16.0dip"
@@ -174,17 +173,17 @@
                         android:contentDescription="@string/controls_lock"
                         android:layout_marginStart="@dimen/dimen_controls_horizontal"
                         app:tint="@android:color/white" />
-                </LinearLayout>
                 <ImageButton
                         android:id="@+id/btn_pip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dimen_controls_horizontal"
-                        android:background="@drawable/transparent_circle_background"
+                        android:background="@drawable/rounded_corner"
                         android:contentDescription="@string/screen_rotation"
                         android:padding="12dp"
                         android:src="@drawable/ic_pip"
                         app:tint="@android:color/white" />
+                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
         <LinearLayout
