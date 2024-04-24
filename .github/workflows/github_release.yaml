@@ -1,8 +1,6 @@
 name: Build Release APK and Create Draft Github Release
 on:
   push:
-    tags:
-      - v*
 
 jobs:
   build_and_release:
