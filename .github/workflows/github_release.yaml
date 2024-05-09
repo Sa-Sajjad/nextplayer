@@ -1,8 +1,8 @@
 name: Build Release APK and Create Draft Github Release
 on:
+  workflow_dispatch:
   push:
-    tags:
-      - v*
+    branches: [ "lst" ]
 
 jobs:
   build_and_release:
@@ -21,6 +21,14 @@ jobs:
           java-version: 17
           distribution: temurin
 
+      - name: Write key
+        run: |
+          if [ ! -z "${{ secrets.KEY_STORE}}" ]; then
+            echo '${{ secrets.LOCAL_PROPERTIES}}' >> local.properties
+            wget ${{ secrets.KEY_STORE }}
+            cp snxgram.jks app/snxgram.jks
+          fi
+
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
 
@@ -29,32 +37,10 @@ jobs:
 
       - name: Build Release APK
         run: ./gradlew assembleRelease
+          
 
-      - name: Sign Release APK
-        uses: r0adkll/sign-android-release@f30bdd30588842ac76044ecdbd4b6d0e3e813478
-        with:
-          releaseDirectory: app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.KEYSTORE }}
-          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
-          alias: ${{ secrets.KEY_ALIAS }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
-
-      - name: Rename Files
+      - name: Upload to Telegram          
         run: |
-          mv app/build/outputs/apk/release/app-arm64-v8a-release-unsigned-signed.apk app/build/outputs/apk/release/nextplayer-${{ env.TAG_NAME }}-arm64-v8a.apk
-          mv app/build/outputs/apk/release/app-armeabi-v7a-release-unsigned-signed.apk app/build/outputs/apk/release/nextplayer-${{ env.TAG_NAME }}-armeabi-v7a.apk
-          mv app/build/outputs/apk/release/app-universal-release-unsigned-signed.apk app/build/outputs/apk/release/nextplayer-${{ env.TAG_NAME }}-universal.apk
-          mv app/build/outputs/apk/release/app-x86-release-unsigned-signed.apk app/build/outputs/apk/release/nextplayer-${{ env.TAG_NAME }}-x86.apk
-          mv app/build/outputs/apk/release/app-x86_64-release-unsigned-signed.apk app/build/outputs/apk/release/nextplayer-${{ env.TAG_NAME }}-x86_64.apk
-
-      - name: Create Draft Release
-        id: create_draft_release
-        uses: softprops/action-gh-release@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          files: app/build/outputs/apk/release/nextplayer*
-          draft: true
-          title: Release ${{ github.ref }}
-          body: |
-            Your release notes go here.
+          cd app/build/outputs/apk/release
+          ls
+          curl https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}/sendDocument -X POST -F chat_id="1278600516" -F document="@app-arm64-v8a-release.apk"
